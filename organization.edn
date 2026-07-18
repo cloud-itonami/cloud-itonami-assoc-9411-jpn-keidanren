@@ -1,0 +1,10 @@
+;; Real-world organization identity/contact.
+;; :head-role is institutional title only -- no personal names.
+{:name-en "Keidanren (Japan Business Federation / 日本経済団体連合会)"
+ :abbreviation "Keidanren"
+ :official-url "https://www.keidanren.or.jp/"
+ :isic "9411"
+ :country "JPN"
+ :established-date "1946-08-16"
+ :head-role-note "institutional office title only (Chairman); personal names of former founding chairmen incidentally encountered in source text but never persisted here"
+ :sourced-from "verified directly (WebFetch) 2026-07-18 -- keidanren.or.jp's own official '/en/profile/pro001.html' page states verbatim 'Japan Federation of Economic Organizations (Keidanren) was established in August 1946, immediately after the end of World War II' and separately, in its overview section, gives day-level precision: 'Established: August 16, 1946'. The same official page also confirms 'In 2002, Keidanren and Nikkeiren merged to form the Japan Business Federation as a new comprehensive economic organization' -- month/year precision only ('2002'), independently corroborated by en.wikipedia.org's own article, which adds month precision: 'founded in May 2002 by amalgamation of Keidanren...and Nikkeiren...with Nikkeiren being absorbed into Keidanren'."}

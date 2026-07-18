@@ -1,0 +1,25 @@
+;; data/datascript-tx.edn — DataScript tx-data derived from src/association/facts.cljc
+;; `association.facts/catalog` (ADR-2607141700 Wave 0). Same shape as sibling files.
+
+[#:association-rule{:id "keidanren.founding-1946-08-16"
+                     :title "Japan Federation of Economic Organizations (Keidanren) established 16 August 1946, immediately after the end of World War II (keidanren.or.jp's own official page)"
+                     :association "keidanren"
+                     :isic "9411"
+                     :country "JPN"
+                     :kind :governance-program
+                     :url "http://www.keidanren.or.jp/en/profile/pro001.html"
+                     :url-provenance :official-keidanren-or-jp
+                     :established-date "1946-08-16"
+                     :retrieved-at "2026-07-18"
+                     :topic [:governance]}
+ #:association-rule{:id "keidanren.nikkeiren-merger-2002-05"
+                     :title "Keidanren and Nikkeiren merged in May 2002 to form today's Japan Business Federation, with Nikkeiren absorbed into Keidanren (keidanren.or.jp's own page, month precision independently corroborated by en.wikipedia.org)"
+                     :association "keidanren"
+                     :isic "9411"
+                     :country "JPN"
+                     :kind :governance-program
+                     :url "https://en.wikipedia.org/wiki/Japan_Business_Federation"
+                     :url-provenance :official-plus-wikipedia-corroborated
+                     :established-date "2002-05"
+                     :retrieved-at "2026-07-18"
+                     :topic [:governance]}]
