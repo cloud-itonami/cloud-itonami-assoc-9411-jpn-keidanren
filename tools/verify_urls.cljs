@@ -1,0 +1,60 @@
+;; tools/verify_urls.cljs -- fetch every url the catalog cites and report the status.
+;;
+;; Run:  nbb tools/verify_urls.cljs
+;;
+;; The urls are read from data/datascript-tx.edn, never typed here. A checker
+;; with its own copy of the list stops testing the catalog the moment the
+;; catalog changes, and says nothing when it does.
+;;
+;; This is NOT part of `clojure -M:test`. It reaches the public internet, so a
+;; broken network would turn a citation check into a red suite; and a citation
+;; that 404s tomorrow is a fact about keidanren.or.jp, not a defect in this
+;; repo's code. Run it when you add or edit a citation.
+;;
+;; A control url is fetched alongside: a path on the same host that does not
+;; exist. If the control does not come back 404, the checker is not reading
+;; status at all -- everything would pass, including the citations that are
+;; already gone -- so it refuses to report on the catalog and exits 2.
+(ns verify-urls
+  (:require [clojure.edn :as edn]
+            ["fs" :as fs]))
+
+(def ^:private control-url
+  "https://www.keidanren.or.jp/profile/this-path-does-not-exist-itonami-control.html")
+
+(def ^:private user-agent "itonami-fact-catalog/1.0 (+cloud-itonami-assoc-9411-jpn-keidanren)")
+
+(defn- status [url]
+  (-> (js/fetch url #js {:redirect "follow" :headers #js {"user-agent" user-agent}})
+      (.then (fn [r] {:url url :status (.-status r) :type (.get (.-headers r) "content-type")}))
+      (.catch (fn [e] {:url url :status :unreachable :error (str e)}))))
+
+(defn- entries []
+  (edn/read-string (fs/readFileSync "data/datascript-tx.edn" "utf8")))
+
+(defn- run []
+  (let [urls (vec (distinct (map :association-rule/url (entries))))]
+    (-> (status control-url)
+        (.then
+         (fn [ctl]
+           (if (not= 404 (:status ctl))
+             (do (println "REFUSED: the control url answered" (:status ctl) "and not 404.")
+                 (println "  A checker that cannot tell a missing page from a present one")
+                 (println "  would pass every citation, including the dead ones.")
+                 (js/process.exit 2))
+             (do
+               (println "control" (:status ctl) control-url)
+               (-> (js/Promise.all (clj->js (map status urls)))
+                   (.then (fn [rs]
+                            (let [rs  (js->clj rs :keywordize-keys true)
+                                  bad (remove #(= 200 (:status %)) rs)]
+                              (doseq [{:keys [status url type]} rs]
+                                (println status (or type "-") url))
+                              (println "CHECKED" (count rs) "urls from data/datascript-tx.edn,"
+                                       (count bad) "not 200")
+                              (when (zero? (count rs))
+                                (println "REFUSED: the catalog cited no urls; there was nothing to check.")
+                                (js/process.exit 2))
+                              (js/process.exit (if (seq bad) 1 0)))))))))))))
+
+(run)
