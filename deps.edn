@@ -2,8 +2,10 @@
  :aliases
  {:test {:extra-paths ["test"]
          ;; amu is TEST-ONLY, for the catalog parity gate: it compiles
-         ;; `src/association_facts.kotoba` and runs it against the `.cljc` that
-         ;; reads the same `data/datascript-tx.edn`. Nothing at runtime compiles.
+         ;; `src/association_facts.kotoba` -- generated from
+         ;; `data/datascript-tx.edn` -- and runs it against the `.cljc`, which
+         ;; holds the same catalog as a hand-authored literal. Nothing at
+         ;; runtime compiles.
          :extra-deps {io.github.cognitect-labs/test-runner
                       {:git/tag "v0.5.1" :git/sha "dfb30dd"}
                       io.github.kotoba-lang/amu
