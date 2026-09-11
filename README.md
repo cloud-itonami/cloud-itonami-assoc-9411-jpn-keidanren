@@ -57,14 +57,14 @@ know how far a fact has been checked. Three tiers:
 Every cited url was fetched 2026-09-06 and returned 200. Re-check them:
 
 ```bash
-nbb tools/verify_urls.cljs      # 0 = all 200, 1 = something moved, 2 = refused
+kbb --backend sci tools/verify_urls.cljk      # 0 = all 200, 1 = something moved, 2 = refused
 ```
 
 That checker reads the urls from the data file rather than holding its
 own copy, and fetches a control path that must come back 404 — a
 checker that cannot tell a missing page from a present one would pass
 every citation, including the dead ones, so it refuses instead. It is
-deliberately **not** part of `clojure -M:test`: it reaches the public
+deliberately **not** part of `kbb -M:test`: it reaches the public
 internet, and a citation that 404s tomorrow is a fact about
 keidanren.or.jp, not a defect in this repo's code.
 
@@ -87,7 +87,7 @@ only.
   `cloud-itonami`/`etzhayyim` compliance-fact sources via
   `com-junkawasaki/root`'s `scripts/compliance-fact-query.cljs`.
 - `src/association_facts.kotoba` — **generated** by
-  `nbb tools/gen_kotoba.cljs` from the data file. Do not edit by hand.
+  `kbb --backend sci tools/gen_kotoba.cljk` from the data file. Do not edit by hand.
 - `schema/association-rule.edn` — DataScript schema.
 
 The `.cljc` and the `.kotoba` are written independently — one by hand,
@@ -98,8 +98,8 @@ order, and every `by-topic` index; the topic order is transcribed into
 the test by hand as a third witness to what the data file says.
 
 ```bash
-clojure -M:test                 # catalog invariants + Kotoba parity
-nbb tools/gen_kotoba.cljs       # regenerate the port after editing the data
+kbb -M:test                 # catalog invariants + Kotoba parity
+kbb --backend sci tools/gen_kotoba.cljk       # regenerate the port after editing the data
 ```
 
 ## License
